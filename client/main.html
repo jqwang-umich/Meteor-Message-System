@@ -25,8 +25,8 @@
   <h1>Current User: {{getCurrentUser}}</h1>
   <button id = "logout">Logout</button>
   {{#if getNumUsers}}
-    {{#each getUsers}}
-      <button id="{{user}}">{{user}}</button>
+    {{#each getUsersList}}
+      <button class = 'chatUser' id="{{user_name}}">{{user_name}}</button>
     {{/each}}
   {{else}}
     <h3>No other users</h3>

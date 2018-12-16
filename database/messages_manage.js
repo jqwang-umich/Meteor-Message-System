@@ -35,5 +35,12 @@ Meteor.methods({
             from_user: userName1,
             content: content
         });
+
+        Messages.insert({
+            user_name1: userName2,
+            user_name2: userName1,
+            from_user: userName1,
+            content: content
+        });
     }
 })
