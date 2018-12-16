@@ -14,7 +14,7 @@ Template.main.helpers({
     return Session.get('currentUser');
   }
 });
-
+// -----------------------------------------------------------
 Template.loginForm.onCreated(function() {
 	localStorage.setItem('loginError', 'No error');
 });
@@ -26,8 +26,8 @@ Template.loginForm.helpers({
 });
 
 Template.loginForm.events({
-  'submit #loginForm': function(event) {
-		// event.preventDefault();
+  'submit #login': function(event) {
+		event.preventDefault();
 
 		var newUsername = event.target.loginName.value;
 
@@ -38,9 +38,11 @@ Template.loginForm.events({
 			if(userExists) {
 			  localStorage.setItem('currentUser', newUsername);
 			}else {
+        console.log("user name does not exist");
         localStorage.setItem('loginError',"Error: Username does not exist");
 			}
 		}else {
+      console.log("should input name");
 			localStorage.setItem('loginError',"Error: Please enter a username");
 		}
 	},
@@ -49,19 +51,17 @@ Template.loginForm.events({
 
 // ---------------------------------------------------------------------------------
 Template.signupForm.onCreated(function() {
-	this.signupFormError = new ReactiveVar("No error");
+	localStorage.setItem('signupError', 'No error');
 });
 
-Template.signupForm.helpers({
+Template.loginForm.helpers({
   getError(){
-    console.log("error message ",Template.instance().loginFormError.get());
-    return Template.instance().loginFormError.get();
-
+    return localStorage.getItem('signupError');
   }
 });
 
-Template.signupForm.events({
-  'submit #loginForm': function(event) {
+Template.loginForm.events({
+  'submit #signup': function(event) {
 		event.preventDefault();
 
 		var newUsername = event.target.loginName.value;
@@ -69,15 +69,17 @@ Template.signupForm.events({
 		if(newUsername) {
 
 			var userExists = Users.find({ user: newUsername }).count();
-      console.log("user name ",userExists);
+      
 			if(userExists) {
-				Session.set('currentUser', newUsername);
+			  localStorage.setItem('signupError', "Error: Username already exists");
 			}else {
-        Template.instance().loginFormError.set("Error: Username does not exist");
-        $('#login-error').css('display', 'block');
+        Session.set('currentUser', newUsername);
+        Users.insert({
+          user:newUsername
+        });
 			}
 		}else {
-			Template.instance().loginFormError.set("Error: Please enter a username");
+			localStorage.setItem('signupError',"Error: Please enter a username");
 		}
 	},
 
