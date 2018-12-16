@@ -16,12 +16,12 @@ Template.main.helpers({
 });
 // -----------------------------------------------------------
 Template.loginForm.onCreated(function() {
-	localStorage.setItem('loginError', 'No error');
+	this.loginError = new ReactiveVar("");
 });
 
 Template.loginForm.helpers({
-  getError(){
-    return localStorage.getItem('loginError');
+  getLoginError(){
+    return Template.instance().loginError.get();
   }
 });
 
@@ -39,11 +39,11 @@ Template.loginForm.events({
 			  localStorage.setItem('currentUser', newUsername);
 			}else {
         console.log("user name does not exist");
-        localStorage.setItem('loginError',"Error: Username does not exist");
+        Template.instance().loginError.set("Error: Username does not exist");
 			}
 		}else {
       console.log("should input name");
-			localStorage.setItem('loginError',"Error: Please enter a username");
+			Template.instance().loginError.set("Error: Please enter a username");
 		}
 	},
 
@@ -51,27 +51,27 @@ Template.loginForm.events({
 
 // ---------------------------------------------------------------------------------
 Template.signupForm.onCreated(function() {
-	localStorage.setItem('signupError', 'No error');
+	this.signupError = new ReactiveVar("");
 });
 
-Template.loginForm.helpers({
-  getError(){
-    return localStorage.getItem('signupError');
+Template.signupForm.helpers({
+  getSignupError(){
+    return Template.instance().signupError.get();
   }
 });
 
-Template.loginForm.events({
+Template.signupForm.events({
   'submit #signup': function(event) {
 		event.preventDefault();
 
-		var newUsername = event.target.loginName.value;
+		var newUsername = event.target.signupName.value;
 
 		if(newUsername) {
 
 			var userExists = Users.find({ user: newUsername }).count();
       
 			if(userExists) {
-			  localStorage.setItem('signupError', "Error: Username already exists");
+			  Template.instance().signupError.set("Error: Username already exists");
 			}else {
         Session.set('currentUser', newUsername);
         Users.insert({
@@ -79,7 +79,7 @@ Template.loginForm.events({
         });
 			}
 		}else {
-			localStorage.setItem('signupError',"Error: Please enter a username");
+			Template.instance().signupError.set("Error: Please enter a username");
 		}
 	},
 
