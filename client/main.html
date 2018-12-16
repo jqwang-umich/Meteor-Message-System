@@ -3,26 +3,22 @@
 </head>
 
 <body>
-  <h1>EECS 498 Message System</h1>
+  <!-- <h1>EECS 498 Message System</h1> -->
   {{>main}}
 </body>
 
 <template name = "main">
+  <h1>EECS 498 Message System</h1>
   {{#if getCurrentUser}}
     {{> message}}
   {{else}}
-    {{>loginForm}}
+    {{>Form}}
   {{/if}}
 </template>
 
-<template name="loginForm">
-  <h2>Login</h2>
-  <form id = "login">
-      <input type="text" name="loginName" placeholder="Input your username">
-      <input type="submit" value="Login">
-      <input type="submit" value="Sign Up">
-  </form>
-  {{ getError }}
+<template name="Form">
+  {{>loginForm}}
+  {{>signupForm}}
 </template>
 
 <template name="message">
@@ -51,4 +47,20 @@
 
 </template>
 
+<template name="loginForm">
+    <h2>Login</h2>
+    <form id = "login">
+        <input type="text" name="loginName" placeholder="Input your username">
+        <input type="submit" value="Login">
+    </form>
+    <h4>{{ getError }}</h4>
+  </template>
 
+  <template name="signupForm">
+      <h2>Signup</h2>
+      <form id = "signup">
+          <input type="text" name="signupName" placeholder="Input your username">
+          <input type="submit" value="Signup">
+      </form>
+      {{ getError }}
+  </template>
