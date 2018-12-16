@@ -111,12 +111,7 @@ Template.message.helpers({
     var clickedUser = Session.get('currentChat');
 
 		if(clickedUser) {
-			// Meteor.call('messages.getChatHistory',currentUser,clickedUser,(error,result)=>{
-      //     console.log("chat histories error: ",error);
-      //     // returnResult = JSON.stringify(result);
-      //     returnResult = result;
-      //     console.log("chat histories result: ",(returnResult));
-      //     return returnResult;
+			
       return Messages.find({ $or : [ 
         { user_name1 : currentUser, user_name2 : clickedUser } , 
         { user_name2 : currentUser, user_name1 : clickedUser } 
@@ -124,7 +119,6 @@ Template.message.helpers({
         },{ sort : { createTime : 1 }}).fetch();
       }
 
-		// return [];
 	},
 });
 
@@ -144,12 +138,11 @@ Template.message.events({
 
     var clickedUser = $(event.target).text();
     console.log("user is ",clickedUser);
-		// $('#' + clickedUser).addClass('selected');
-
 		Session.set('currentChat', clickedUser);
   },
   
   'submit. #send-msg': function(event){
+    event.preventDefault();
     var currentUser = Session.get('currentUser');
     var clickedUser = Session.get('currentChat');
     var msgContent = event.target.messageText.value;
@@ -158,7 +151,11 @@ Template.message.events({
           console.log("chat submit error: ",error);
           console.log("chat submit result: ",result);
         })
-    }
+    };
+    },
     
+    'click .btnMesDelete':function(event){
+      id = $(event.target).attr('id');
+      Meteor.call('messages.deleteChatHistory',id);
   }
 });
