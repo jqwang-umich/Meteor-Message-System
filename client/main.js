@@ -1,17 +1,18 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+import {Session} from 'meteor/session'
+import {User} from '/database/users'
 
 import './main.html';
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
+Template.main.onCreated(function () {
+  Session.set('currentUser', '');
 });
 
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
+Template.main.helpers({
+  getCurrentUser(){
+    return Session.get('currentUser');
+  }
 });
 
 Template.hello.events({

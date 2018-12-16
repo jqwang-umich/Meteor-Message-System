@@ -3,20 +3,52 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-  {{> info}}
-  {{> Login}}
- 
+  <h1>EECS 498 Message System</h1>
+  {{>main}}
 </body>
 
-<template name="info">
-  <h4>
-    EECS 498 Messaging System - via Jiaqi Wang
-  </h4>
+<template name = "main">
+  {{#if getCurrentUser}}
+    {{> message}}
+  {{else}}
+    {{>loginForm}}
+  {{/if}}
 </template>
-<template name="Login">
-  <button>Sign In</button>
-  <button>Sign Up</button>
+
+<template name="loginForm">
+  <h2>Login</h2>
+  <form id = "login">
+      <input type="text" name="loginName" placeholder="Input your username">
+      <input type="submit" value="Login">
+      <input type="submit" value="Sign Up">
+  </form>
+  {{ getError }}
+</template>
+
+<template name="message">
+  <h1>Current User: {{getCurrentUser}}</h1>
+  <button id = "logout">Logout</button>
+  {{#if getNumUsers}}
+    {{#each getUsers}}
+      <button id="{{user}}">{{user}}</button>
+    {{/each}}
+  {{else}}
+    <h3>No other users</h3>
+  {{/if}}
+
+  {{#if getClickedUser}}
+    {{#each getMessages}}
+      {{sender}}:{{content}}
+      <button class = "btnMesDelete" id="{{id}}">delete</button>
+    {{/each}}
+    <form id="send-msg">
+        <input type="text" id="messageInput" name="messageText" placeholder="Input your message">
+        <input type="submit" value="Send">
+    </form>
+  {{else}}
+      <h3>No User Selected</h3>
+  {{/if}}
+
 </template>
 
 
