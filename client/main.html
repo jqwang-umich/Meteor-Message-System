@@ -33,9 +33,11 @@
   {{/if}}
 
   {{#if getClickedUser}}
+    <!-- <h3>getClickedUser is OK</h3> -->
     {{#each getChatHistories}}
+      <h4>hahaha</h4>
       <h4>{{user_name1}}:{{content}}</h4>
-      <button class = "btnMesDelete" id="{{id}}">delete</button>
+      <button class = "btnMesDelete" id="{{_id}}">delete</button>
     {{/each}}
     <form id="send-msg">
         <input type="text"  name="messageText" placeholder="Input your message">

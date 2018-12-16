@@ -21,7 +21,7 @@ Meteor.methods({
             { user_name1 : userName1, user_name2 : userName2 } , 
             { user_name2 : userName1, user_name1 : userName2 } 
           ] 
-  },{ sort : { createTime : -1 }}).fetch();
+  },{ sort : { createTime : 1 }}).fetch();
     },
 
     'messages.deleteChatHistory'(id){
@@ -29,13 +29,13 @@ Meteor.methods({
     },
 
     'messages.addInformation'(userName1,userName2,content){
-        Messages.insert({
+        id = Messages.insert({
             'user_name1': userName1,
             'user_name2': userName2,
             'content': content,
             'createTime': new Date()
         });
-
+        return id;
         
     }
 })

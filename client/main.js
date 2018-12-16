@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import {Session} from 'meteor/session'
-import {Users} from '/database/users'
+import {Users} from '../database/users'
 import {Meteor} from 'meteor/meteor'
+import {Messages} from '../database/messages'
 
 import './main.html';
 import './startup.js';
@@ -110,13 +111,18 @@ Template.message.helpers({
     var clickedUser = Session.get('currentChat');
 
 		if(clickedUser) {
-			Meteor.call('messages.getChatHistory',currentUser,clickedUser,(error,result)=>{
-          console.log("chat histories error: ",error);
-          console.log("chat histories result: ",result);
-          return result;
+			// Meteor.call('messages.getChatHistory',currentUser,clickedUser,(error,result)=>{
+      //     console.log("chat histories error: ",error);
+      //     // returnResult = JSON.stringify(result);
+      //     returnResult = result;
+      //     console.log("chat histories result: ",(returnResult));
+      //     return returnResult;
+      return Messages.find({ $or : [ 
+        { user_name1 : currentUser, user_name2 : clickedUser } , 
+        { user_name2 : currentUser, user_name1 : clickedUser } 
+      ] 
+        },{ sort : { createTime : 1 }}).fetch();
       }
-      )
-		}
 
 		// return [];
 	},
