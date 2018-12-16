@@ -17,11 +17,11 @@ Meteor.methods({
 
 
     'messages.getChatHistory'(userName1,userName2){
-        HistoryList = new Array();
-        histories = Messages.find({user_name1: userName1, user_name2: userName2},{_id, from_user,content});
-        histories.forEach(history=>{
-
-        })
+        return Messages.find({ $or : [ 
+            { user_name1 : userName1, user_name2 : userName2 } , 
+            { user_name2 : userName1, user_name1 : userName2 } 
+          ] 
+  },{ sort : { createTime : -1 }}).fetch();
     },
 
     'messages.deleteChatHistory'(id){
@@ -30,17 +30,12 @@ Meteor.methods({
 
     'messages.addInformation'(userName1,userName2,content){
         Messages.insert({
-            user_name1: userName1,
-            user_name2: userName2,
-            from_user: userName1,
-            content: content
+            'user_name1': userName1,
+            'user_name2': userName2,
+            'content': content,
+            'createTime': new Date()
         });
 
-        Messages.insert({
-            user_name1: userName2,
-            user_name2: userName1,
-            from_user: userName1,
-            content: content
-        });
+        
     }
 })

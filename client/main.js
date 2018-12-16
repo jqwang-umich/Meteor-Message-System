@@ -105,16 +105,20 @@ Template.message.helpers({
 	getClickedUser() {
 		return Session.get('currentChat');
 	},
-	getMessages() {
-		var currUser = Session.get('currentUser');
-		var clickedUser = Session.get('currentChat');
+	getChatHistories() {
+		var currentUser = Session.get('currentUser');
+    var clickedUser = Session.get('currentChat');
 
 		if(clickedUser) {
-			var user = Messages.findOne({ user: currUser });
-			return user['chats'][clickedUser];
+			Meteor.call('messages.getChatHistory',currentUser,clickedUser,(error,result)=>{
+          console.log("chat histories error: ",error);
+          console.log("chat histories result: ",result);
+          return result;
+      }
+      )
 		}
 
-		return [];
+		// return [];
 	},
 });
 
@@ -137,5 +141,18 @@ Template.message.events({
 		// $('#' + clickedUser).addClass('selected');
 
 		Session.set('currentChat', clickedUser);
-	},
+  },
+  
+  'submit. #send-msg': function(event){
+    var currentUser = Session.get('currentUser');
+    var clickedUser = Session.get('currentChat');
+    var msgContent = event.target.messageText.value;
+    if(msgContent !== null){
+        Meteor.call('messages.addInformation',currentUser,clickedUser,msgContent,(error,result)=>{
+          console.log("chat submit error: ",error);
+          console.log("chat submit result: ",result);
+        })
+    }
+    
+  }
 });
