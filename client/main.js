@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import {Session} from 'meteor/session'
 import {Users} from '/database/users'
+import {Meteor} from 'meteor/meteor'
 
 import './main.html';
 
@@ -73,10 +74,8 @@ Template.signupForm.events({
 			if(userExists) {
 			  Template.instance().signupError.set("Error: Username already exists");
 			}else {
+        Meteor.call('users.insert',newUsername);
         Session.set('currentUser', newUsername);
-        Users.insert({
-          user:newUsername
-        });
 			}
 		}else {
 			Template.instance().signupError.set("Error: Please enter a username");
